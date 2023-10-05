@@ -10,11 +10,19 @@ const deploymentName = process.env.OPENAI_DEPLOYMENTNAME;
 exports.talk = async (req, res) => {
     try {
       const {question, type} = req.body;
-      const { choices } = await client.getCompletions(deploymentName, [question]);
-      for (const choice of choices) {
-        const completion = choice.text;
+      if(type=='text'){
+        const { choices } = await client.getCompletions(deploymentName, [question]);
+        const completion = choices[0].text;
         return res.status(200).json({message: completion});
-      }
+       } else if(type=='image'){
+        const size = "256x256";
+        const n = 3;
+        const results = await client.getImages(question, { n, size });
+        for (const image of results.data) {
+            return res.status(200).json({message: image.url});
+        }
+       }
+     
     } catch (err) {
         res.status(401).json({message: err});
     }

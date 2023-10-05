@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended:true}))
 // ROUTES
 app.use("/api/auth",  authRouter);
 app.use("/api/data", verifyAccessToken, fetchingDataRouter);
-app.use("/api/talk", verifyAccessToken, chatBotRoute);
+app.use("/api/talk",  chatBotRoute);
 
 
 module.exports = app;
